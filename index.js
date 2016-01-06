@@ -18,27 +18,22 @@ macro rlet {
     letstx $dots = [makePunc('...', #{$varname})];
     return #{
       let $s = new Signal(function() {
-        $( $deps read ; ) ... { return $expr; }
+        $( $deps read ; ) ... return $expr;
       });
       let $varname = macro {
-        case { _ = $next:expr } => {
-          return #{ $s.push($next) };
+        rule { = $next:expr } => {
+          $s.push($next)
         }
-        case { $v read ; $rest $dots } => {
-          letstx $it = [makeIdent(unwrapSyntax(#{$var}), null)];
-          return #{
-            (function ($it) {
-              $rest $dots
-            })($s.read());
-          };
+        rule { read ; $rest $dots } => {
+          macro $var {
+            rule { } => { $s.read() }
+          }
+          $rest $dots
         }
         rule { subscribe $update:ident ; } => {
           $s.onUpdate($update);
         }
-        case { _ } => {
-          letstx $it = [makeIdent(unwrapSyntax(#{$var}), null)];
-          return #{$it};
-        }
+        rule { } => { $var }
       }
       let update = function() { $s.update(); };
       $( $deps subscribe update ; ) ...
@@ -56,32 +51,34 @@ macro subscribe {
   }
 }`;
 
-function Signal(expr) {
-  this.subscribers = [];
-  this.expr = expr;
-  this.last = expr();
+class Signal {
+  constructor(expr) {
+    this.subscribers = [];
+    this.expr = expr;
+    this.last = expr();
+  }
+
+  push(val) {
+    this.last = val;
+    this.subscribers.forEach(s => s());
+  }
+
+  read() {
+    return this.last;
+  }
+
+  onUpdate(subscriber) {
+    this.subscribers.push(subscriber);
+    subscriber();
+  }
+
+  update() {
+    this.last = this.expr();
+    this.subscribers.forEach(s => s());
+  }
 }
-
-Signal.prototype.push = val => {
-  this.last = val;
-  this.subscribers.forEach(s => s());
-};
-
-Signal.prototype.read = cb => {
-  return cb(this.last);
-};
-
-Signal.prototype.onUpdate = subscriber => {
-  this.subscribers.push(subscriber);
-};
-
-Signal.prototype.update = () => {
-  this.last = this.expr();
-  this.subscribers.forEach(s => s());
-};
 
 export default function run(src) {
   const expanded = sweet.compile(macros + src);
-  console.log(expanded.code);
   eval(expanded.code);
 }

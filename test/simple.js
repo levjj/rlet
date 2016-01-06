@@ -14,12 +14,13 @@ describe('rlet', () => {
   it('should support imperative updates', (done) => {
     const src = `
       rlet a = 3;
-      subscribe(a) { global.f(a); }
-      global.g = function() { a = 5 };`;
+      global.g = function() { a = 5 };
+      subscribe(a) { global.f(a); }`;
     let first = true;
     global.f = (v) => {
       if (first) {
         expect(v).to.be.equal(3);
+        first = false;
         global.g();
       } else {
         expect(v).to.be.equal(5);
@@ -32,7 +33,7 @@ describe('rlet', () => {
   it('should support reactive updates', (done) => {
     const src = `
       rlet a = 3;
-      rlet b = a + 1;
+      rlet b(a) = a + 1;
       subscribe(b) { global.f(b); }`;
     global.f = (v) => {
       expect(v).to.be.equal(4);
