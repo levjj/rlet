@@ -2,14 +2,8 @@ import sweet from 'sweet.js';
 
 const macros = `
 macro rlet {
-  rule {
-    $varname:ident = $expr:expr
-  } => {
-    rlet $varname ( ) = $expr
-  }
-
   case {
-    _ $varname:ident ( $deps:ident (,) ... ) = $expr:expr
+    _ $varname:ident = initially ($init:expr) subscribe($deps:ident (,) ... ) = $expr:expr
   } => {
     var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
     letstx $s = [makeIdent('__' + randLetter + Date.now() % 10000, #{$varname})];
@@ -39,15 +33,23 @@ macro rlet {
       $( $deps subscribe update ; ) ...
     }
   }
-}
 
-macro subscribe {
-  rule { ( $deps (,) ... ) { $block ... } } => {
-    let update = function() {
-      $( $deps read ; ) ...
-      $block ...
-    };
-    $( $deps subscribe update ; )  ...
+  rule {
+    $varname:ident = $expr:expr
+  } => {
+    rlet $varname = initially(null) $expr
+  }
+
+  rule {
+    $varname:ident = initially($init ...) $expr:expr
+  } => {
+    rlet $varname = initially($init ...) subscribe() $expr
+  }
+
+  rule {
+    $varname:ident = subscribe($sub ...) $expr:expr
+  } => {
+    rlet $varname = initially(null) subscribe($sub ...) $expr
   }
 }`;
 
