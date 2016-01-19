@@ -8,7 +8,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'static'),
     filename: 'bundle.js',
-    publicPath: build ? '' : '/static/'
+    publicPath: ''
   },
   plugins: [new ExtractTextPlugin('style.css', {allChunks: true})],
   resolve: {
