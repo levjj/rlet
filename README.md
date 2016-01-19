@@ -7,7 +7,7 @@ JavaScript.
 Example:
 
 ```javaScript
-rlet counting = subscribe($(countbtn).click) initially(false)
+rlet counting = subscribe($("#countbtn").click) initially(false)
                 !counting;
 rlet count = subscribe(interval(100)) initially(0)
              counting ? count + 1 : count;
