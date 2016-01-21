@@ -5,8 +5,6 @@ macro rlet {
     var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
     letstx $s = [makeIdent('__' + randLetter + Date.now() % 10000, #{$varname})];
     return #{
-      let $s = new Signal(function() { return $expr; }, $init);
-      $( $deps subscribe $s ; ) ...
       let $varname = macro {
         rule { = $next:expr } => {
           $s.push($next)
@@ -16,6 +14,8 @@ macro rlet {
         }
         rule { } => { $s.read() }
       }
+      let $s = new Signal(function() { return $expr; }, $init);
+      $( $deps subscribe $s ; ) ...
     }
   }
 
