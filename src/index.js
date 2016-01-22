@@ -90,7 +90,13 @@ class Signal {
 
   push(val) {
     this.last = val;
-    this.subscribers.forEach(s => s.update());
+    let toUpdate = [...this.subscribers];
+    while (toUpdate.length > 0) {
+      const [next, ...remaining] = toUpdate;
+      toUpdate = [...remaining, ...next.update()];
+      // keep only *last* occurance of dependency
+      toUpdate = _.chain(toUpdate).reverse().uniq().reverse().value();
+    }
   }
 
   read() {

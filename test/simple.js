@@ -2,6 +2,18 @@ import rlet from '../src/index';
 import {expect} from 'chai';
 
 describe('rlet', () => {
+  it('should not call subscribers without updates', (done) => {
+    const src = `
+      rlet a;
+      rlet b = subscribe(a) a;
+      subscribe(a, b) { global.f(); }`;
+    global.f = () => {
+      done("should not be called");
+    };
+    rlet(src);
+    setTimeout(() => done(), 100);
+  });
+
   it('should support imperative updates', (done) => {
     const src = `
       rlet a;
@@ -113,6 +125,22 @@ describe('rlet', () => {
   });
 
   it('prevents glitches', (done) => {
-    done(false);
+    const src = `
+      rlet a;
+      rlet b = subscribe(a) a + 1;
+      global.g = function() { a = 1; };
+      subscribe(a, b) { global.f(a + b); }`;
+    let first = true;
+    global.f = (v) => {
+      expect(v).to.be.equal(3);
+      if (first) {
+        first = false;
+        done();
+      } else {
+        done(new Error("done called twice"));
+      }
+    };
+    rlet(src);
+    global.g();
   });
 });

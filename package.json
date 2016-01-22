@@ -9,6 +9,7 @@
     "brace": "^0.7.0",
     "chai": "^3.4.1",
     "jquery": "^2.2.0",
+    "lodash": "^4.0.0",
     "react": "^0.14.6",
     "react-ace": "^3.1.0",
     "react-bootstrap": "^0.28.2",
@@ -31,7 +32,7 @@
   },
   "scripts": {
     "build": "node ./node_modules/webpack/bin/webpack.js --verbose --colors --display-error-details --config webpack.config.js",
-    "test": "mocha --harmony --compilers js:babel-core/register test/*"
+    "test": "mocha -t 10000 --harmony --compilers js:babel-core/register test/*"
   },
   "author": "Christopher Schuster <cs@livoris.net>",
   "license": "ISC"
