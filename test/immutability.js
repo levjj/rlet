@@ -7,10 +7,10 @@ describe('functional rlet evaluation', () => {
       var a;
       rlet b;
       rlet c = subscribe(b) (a = true);
-      global.g = function() { b = true };
-      subscribe(a) { global.f(a); }`;
+      window.g = function() { b = true };
+      subscribe(a) { window.f(a); }`;
     rlet(src);
-    expect(() => global.g())
+    expect(() => window.g())
       .to.throw(new Error('State updates in reactive variables not allowed'));
   });
 
@@ -19,10 +19,10 @@ describe('functional rlet evaluation', () => {
       var a = {};
       rlet b;
       rlet c = subscribe(b) (a.prop = true);
-      global.g = function() { b = true };
-      subscribe(a) { global.f(a); }`;
+      window.g = function() { b = true };
+      subscribe(a) { window.f(a); }`;
     rlet(src);
-    expect(() => global.g())
+    expect(() => window.g())
       .to.throw(new Error('State updates in reactive variables not allowed'));
   });
 });

@@ -11,6 +11,7 @@
     "escope": "^3.3.0",
     "jquery": "^2.2.0",
     "lodash": "^4.0.0",
+    "node-libs-browser": "^0.5.3",
     "react": "^0.14.6",
     "react-ace": "^3.1.0",
     "react-bootstrap": "^0.28.2",
@@ -26,14 +27,17 @@
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
+    "json-loader": "^0.5.4",
     "mocha": "^2.3.4",
+    "mocha-loader": "^0.7.1",
+    "raw-loader": "^0.5.1",
     "regenerator": "^0.8.42",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7"
   },
   "scripts": {
     "build": "node ./node_modules/webpack/bin/webpack.js --verbose --colors --display-error-details --config webpack.config.js",
-    "test": "mocha -t 10000 --harmony --compilers js:babel-core/register test/*"
+    "test": "node ./node_modules/webpack/bin/webpack.js --verbose --colors --display-error-details --config webpack.tests.config.js"
   },
   "author": "Christopher Schuster <cs@livoris.net>",
   "license": "ISC"

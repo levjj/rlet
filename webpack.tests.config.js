@@ -4,10 +4,10 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   devtool: 'eval',
-  entry: ['./src/editor'],
+  entry: ['mocha!./test/index.js'],
   output: {
     path: path.join(__dirname, 'static'),
-    filename: 'bundle.js',
+    filename: 'bundle.tests.js',
     publicPath: ''
   },
   plugins: [new ExtractTextPlugin('style.css', {allChunks: true})],
