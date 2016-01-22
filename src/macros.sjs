@@ -3,7 +3,10 @@ macro rlet {
     _ $varname:ident = subscribe($deps:ident (,) ... ) initially ($init:expr) $expr:expr
   } => {
     var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-    letstx $s = [makeIdent('__' + randLetter + Date.now() % 10000, #{$varname})];
+    var self = '__S' + randLetter + Date.now() % 10000;
+    letstx $s = [makeIdent(self, #{$varname})];
+    letstx $depv... = window.globalVars(self, localExpand(#{$expr}))
+      .map(function(idep) { return makeIdent(idep, #{$varname}); });
     return #{
       let $varname = macro {
         rule { = $next:expr } => {
@@ -14,8 +17,9 @@ macro rlet {
         }
         rule { } => { $s.read() }
       }
-      let $s = new Signal(function() { return $expr; }, $init);
+      var $s = new Signal(function() { return $expr; }, $init);
       $( $deps subscribe $s ; ) ...
+      $( $depv.onUpdate($s) ; ) ...
     }
   }
 
