@@ -1,4 +1,8 @@
 import sweet from 'sweet.js';
+import _ from 'lodash';
+import {parse} from 'esprima';
+import {analyze} from 'escope';
+import {generate} from 'escodegen';
 
 // could use webpacke file loader but that does not work for mocha
 let macros = `
@@ -8,6 +12,7 @@ macro rlet {
   } => {
     var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
     letstx $s = [makeIdent('__' + randLetter + Date.now() % 10000, #{$varname})];
+    global.globalVars(localExpand(#{$expr}));
     return #{
       let $varname = macro {
         rule { = $next:expr } => {
@@ -109,11 +114,25 @@ class Signal {
 
   update() {
     this.last = this.expr();
-    this.subscribers.forEach(s => s.update());
+    return this.subscribers;
   }
 }
 
+function globalVars(stx) {
+  const vars = [];
+  const ast = sweet.parse(global.expanded);
+  const scopeManager = analyze(ast);
+  const globalScope = scopeManager.globalScope;
+  for (const {identifier: {name: global}} of globalScope.through) {
+    if (global !== 'Math') {
+      vars.push(global);
+    }
+  }
+  console.log(vars);
+}
+
 export default function run(src) {
+  global.globalVars = globalVars;
   const expanded = sweet.compile(macros + src);
   eval(expanded.code);
 }
