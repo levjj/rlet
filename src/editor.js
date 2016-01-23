@@ -20,7 +20,7 @@ export default class App extends Component {
 
   state = {
     js: `rlet counting = subscribe($("#countBtn").click)
-                initially(false) !counting;
+                initially(true) !counting;
 
 rlet count = subscribe(interval(100))
              initially(0) counting ? count + 1 : count;
