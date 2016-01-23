@@ -1,4 +1,4 @@
-import rlet from '../src/index';
+import {evalR} from '../src/index';
 import {expect} from 'chai';
 
 describe('rlet', () => {
@@ -10,7 +10,7 @@ describe('rlet', () => {
     window.f = () => {
       done("should not be called");
     };
-    rlet(src);
+    evalR(src);
     setTimeout(() => done(), 100);
   });
 
@@ -23,7 +23,7 @@ describe('rlet', () => {
       expect(v).to.be.equal(true);
       done();
     };
-    rlet(src);
+    evalR(src);
     window.g();
   });
 
@@ -43,7 +43,7 @@ describe('rlet', () => {
         done();
       }
     };
-    rlet(src);
+    evalR(src);
     window.g();
   });
 
@@ -57,7 +57,7 @@ describe('rlet', () => {
       expect(v).to.be.equal(6);
       done();
     };
-    rlet(src);
+    evalR(src);
     window.g();
   });
 
@@ -71,7 +71,7 @@ describe('rlet', () => {
       expect(v).to.be.equal(6);
       done();
     };
-    rlet(src);
+    evalR(src);
     window.g();
   });
 
@@ -85,7 +85,7 @@ describe('rlet', () => {
       expect(v).to.be.equal(true);
       done();
     };
-    rlet(src);
+    evalR(src);
     window.g();
   });
 
@@ -99,7 +99,7 @@ describe('rlet', () => {
       expect(v).to.be.equal(true);
       done();
     };
-    rlet(src);
+    evalR(src);
     window.f();
   });
 
@@ -120,7 +120,7 @@ describe('rlet', () => {
         done();
       }
     };
-    rlet(src);
+    evalR(src);
     window.g();
   });
 
@@ -140,7 +140,7 @@ describe('rlet', () => {
         done(new Error("done called twice"));
       }
     };
-    rlet(src);
+    evalR(src);
     window.g();
   });
 });
