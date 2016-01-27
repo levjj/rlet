@@ -17,7 +17,7 @@ macro rlet {
         }
         rule { } => { $s.read() }
       }
-      var $s = new Signal(function() { return $expr; }, $init);
+      var $s = new Signal(function() { "use imm"; return $expr; }, $init);
       $( $deps subscribe $s ; ) ...
       $( $depv.onUpdate($s) ; ) ...
     }
@@ -76,6 +76,6 @@ macro subscribe {
   rule {
     ( $deps ... ) { $stmt ... }
   } => {
-    rlet x = subscribe ( $deps ... ) (function() { $stmt ... })()
+    rlet x = subscribe ( $deps ... ) (function() { "use imm!"; $stmt ... })()
   }
 }

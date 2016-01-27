@@ -9,6 +9,7 @@
     "brace": "^0.7.0",
     "chai": "^3.4.1",
     "escope": "^3.3.0",
+    "estraverse": "^4.1.1",
     "jquery": "^2.2.0",
     "node-libs-browser": "^0.5.3",
     "react": "^0.14.6",
