@@ -12,8 +12,6 @@ require('../node_modules/bootstrap/dist/css/bootstrap.css');
 export default class App extends Component {
 
   onAceLoad(editor) {
-    // require('brace/mode/javascript');
-    // editor.getSession().$mode.$highlightRules.$rules.no_regex.unshift({token: "keyword", regex: "rlet\\b"})
     editor.getSession().setTabSize(2);
     editor.renderer.setShowGutter(true);
   }
