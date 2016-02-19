@@ -17,13 +17,13 @@ export default class App extends Component {
   }
 
   state = {
-    js: `rlet counting = subscribe($("#countBtn").click)
-                initially(true) !counting;
+    js: `rlet paused = subscribe($("#countBtn").click)
+              initially(false) !paused;
 
 rlet count = subscribe(interval(100))
-             initially(0) counting ? count + 1 : count;
+             initially(0) paused ? count : count + 1;
 
-rlet txt = counting ? ("Count: " + count) : "Paused";
+rlet txt = paused ? "Paused" : "Count: " + count;
 
 subscribe(txt) {
   $("#countBtn").text(txt);

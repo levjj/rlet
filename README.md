@@ -8,13 +8,13 @@ As example, the following code implements a counter that increases every 100ms
 but can be paused by a button:
 
 ```javaScript
-rlet counting = subscribe($("#countbtn").click)
-                initially(true) !counting;
+rlet paused = subscribe($("#countBtn").click)
+              initially(false) !paused;
 
 rlet count = subscribe(interval(100))
-             initially(0) counting ? count + 1 : count;
+             initially(0) paused ? count : count + 1;
 
-rlet txt = counting ? ("Count: " + count) : "Paused";
+rlet txt = paused ? "Paused" : "Count: " + count;
 
 subscribe(txt) {
   $("#countBtn").text(txt);
