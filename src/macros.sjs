@@ -48,6 +48,12 @@ macro rlet {
   }
 
   rule {
+    $varname:ident = initially($init ...) subscribe($sub ... ) $expr:expr
+  } => {
+    rlet $varname = subscribe($sub ... ) initially($init ...) $expr
+  }
+
+  rule {
     $varname:ident = initially($init ...) $expr:expr
   } => {
     rlet $varname = subscribe() initially($init ...) $expr
